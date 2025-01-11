@@ -24,12 +24,12 @@ jobs:
       with:
         python-version: '3.12'
 
-    # 3. Install dependencies
+    # 3. Install dependencies and package
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build
         pip install pytest asyncpg
+        pip install .
 
     # 4. Run tests
     - name: Run tests
