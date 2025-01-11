@@ -4,9 +4,9 @@ setup(
     name="natural-query-lib",
     version="0.1.0",
     description="flexible SQL query builder written in Python! This library allows you to build and execute SQL queries with ease, while supporting dynamic parameters and JSON encoding for database compatibility.",
-    author="Tu Nombre",
-    author_email="tuemail@example.com",
-    url="https://github.com/tuusuario/natural-query",
+    author="Sergio Triana Escobedo",
+    author_email="stescobedo.31@gmail.com",
+    url="https://github.com/stescobedo92/natural_query_lib",
     packages=find_packages(),
     install_requires=[],
     classifiers=[
