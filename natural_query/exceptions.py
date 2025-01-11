@@ -6,3 +6,9 @@ class NaturalQueryError(Exception):
 class QueryBuilderError(NaturalQueryError):
     """Raised for errors in the QueryBuilder."""
     pass
+
+
+class QueryExecutionError(NaturalQueryError):
+    """Raised for errors during query execution."""
+    pass
+

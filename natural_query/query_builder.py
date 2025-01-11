@@ -1,17 +1,7 @@
-from typing import List, Optional, Dict, Any
-from enum import Enum
-
-class QueryType(Enum):
-    SELECT = "SELECT"
-    INSERT = "INSERT"
-    UPDATE = "UPDATE"
-    DELETE = "DELETE"
-
-class JoinType(Enum):
-    INNER = "INNER JOIN"
-    LEFT = "LEFT JOIN"
-    RIGHT = "RIGHT JOIN"
-    FULL = "FULL JOIN"
+import json
+from typing import List, Optional, Any, Dict
+from .enums import QueryType, JoinType
+from .exceptions import QueryBuilderError
 
 
 class QueryBuilder:
@@ -22,6 +12,7 @@ class QueryBuilder:
         self.conditions = []
         self.joins = []
         self.values = []
+        self.params = []
         self.order_by = []
         self.group_by = []
         self.having = None
@@ -36,24 +27,25 @@ class QueryBuilder:
         self.columns = columns
         return self
 
-    def where(self, condition: str):
+    def where(self, condition: str, params: Optional[List[Any]] = None):
         self.conditions.append(condition)
+        if params:
+            self.params.extend(params)
         return self
 
     def join(self, join_type: JoinType, table: str, condition: str):
         self.joins.append((join_type.value, table, condition))
         return self
 
+    def values_json(self, data: Dict[str, Any]):
+        """Sets values for INSERT or UPDATE queries with JSON serialization."""
+        for key, value in data.items():
+            self.columns.append(key)
+            self.values.append(json.dumps(value))
+        return self
+
     def order_by_columns(self, columns: List[str]):
         self.order_by = columns
-        return self
-
-    def group_by_columns(self, columns: List[str]):
-        self.group_by = columns
-        return self
-
-    def having_condition(self, condition: str):
-        self.having = condition
         return self
 
     def set_limit(self, limit: int):
@@ -66,7 +58,7 @@ class QueryBuilder:
 
     def build(self) -> str:
         if not self.table:
-            raise ValueError("Table name is required to build the query.")
+            raise QueryBuilderError("Table name is required to build the query.")
 
         query = f"{self.query_type.value} "
 
@@ -74,26 +66,24 @@ class QueryBuilder:
             columns = ", ".join(self.columns) if self.columns else "*"
             query += f"{columns} FROM {self.table} "
 
-        # Joins
-        for join_type, table, condition in self.joins:
-            query += f"{join_type} {table} ON {condition} "
+        elif self.query_type == QueryType.INSERT:
+            cols = ", ".join(self.columns)
+            placeholders = ", ".join(["%s"] * len(self.values))
+            query += f"INTO {self.table} ({cols}) VALUES ({placeholders}) "
 
-        # Conditions
+        elif self.query_type == QueryType.UPDATE:
+            set_clauses = ", ".join([f"{col} = %s" for col in self.columns])
+            query += f"{self.table} SET {set_clauses} "
+
+        elif self.query_type == QueryType.DELETE:
+            query += f"FROM {self.table} "
+
         if self.conditions:
             query += f"WHERE {' AND '.join(self.conditions)} "
 
-        # Group By
-        if self.group_by:
-            query += f"GROUP BY {', '.join(self.group_by)} "
-
-        if self.having:
-            query += f"HAVING {self.having} "
-
-        # Order By
         if self.order_by:
             query += f"ORDER BY {', '.join(self.order_by)} "
 
-        # Limit and Offset
         if self.limit is not None:
             query += f"LIMIT {self.limit} "
 
@@ -101,3 +91,7 @@ class QueryBuilder:
             query += f"OFFSET {self.offset} "
 
         return query.strip()
+
+    def get_parameters(self) -> List[Any]:
+        """Returns the list of parameters to bind dynamically."""
+        return self.values + self.params
