@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="natural_query_lib",
-    version="0.1.0",
+    version="0.1.1",
     description="flexible SQL query builder written in Python! This library allows you to build and execute SQL queries with ease, while supporting dynamic parameters and JSON encoding for database compatibility.",
     author="Sergio Triana Escobedo",
     author_email="stescobedo.31@gmail.com",
