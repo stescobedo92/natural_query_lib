@@ -30,7 +30,7 @@ pip install natural-query
 ### **1. Build a Simple SELECT Query**
 
 ```python
-from natural_query_lib.query_builder import QueryBuilder, QueryType
+from src import QueryBuilder, QueryType
 
 query = (
     QueryBuilder(QueryType.SELECT)
@@ -50,7 +50,7 @@ print(query)  # Output: SELECT id, name, email FROM users WHERE age > %s LIMIT 1
 
 ```python
 import asyncio
-from natural_query_lib.executor import QueryExecutor
+from src import QueryExecutor
 
 
 async def main():
@@ -75,7 +75,7 @@ asyncio.run(main())
 ### **3. INSERT Data with JSON Support**
 
 ```python
-from natural_query_lib.query_builder import QueryBuilder, QueryType
+from src import QueryBuilder, QueryType
 
 query_builder = (
     QueryBuilder(QueryType.INSERT)
@@ -99,7 +99,7 @@ print(params)  # Output: ["John Doe", "john@example.com", '{"age": 30, "location
 ### **4. Complex Query with Joins**
 
 ```python
-from natural_query_lib.query_builder import QueryBuilder, QueryType, JoinType
+from src import QueryBuilder, QueryType, JoinType
 
 query = (
     QueryBuilder(QueryType.SELECT)

@@ -1,5 +1,4 @@
-import pytest
-from natural_query_lib.query_builder import QueryBuilder, QueryType, JoinType
+from src.natural_query_lib_stescobedo import QueryBuilder, QueryType
 
 
 def test_select_query():
