@@ -1,4 +1,4 @@
-name: Python Package CI
+name: natural_query_lib CI
 
 on:
   push:

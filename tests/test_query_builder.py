@@ -1,5 +1,5 @@
 import pytest
-from natural_query.query_builder import QueryBuilder, QueryType, JoinType
+from natural_query_lib.query_builder import QueryBuilder, QueryType, JoinType
 
 
 def test_select_query():
