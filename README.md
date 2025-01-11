@@ -1,8 +1,6 @@
-# Natural Query
+# natural_query_lib
 
-Welcome to **Natural Query**! 🎉
-
-**Natural Query** is a lightweight Python library designed to simplify SQL query building and execution. It combines a fluent API with dynamic parameter binding and JSON support, making it easier for developers to work with SQL databases in an efficient and Pythonic way.
+**natural_query_lib** is a lightweight Python library designed to simplify SQL query building and execution. It combines a fluent API with dynamic parameter binding and JSON support, making it easier for developers to work with SQL databases in an efficient and Pythonic way.
 
 ---
 
