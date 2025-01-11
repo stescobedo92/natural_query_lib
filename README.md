@@ -20,7 +20,7 @@
 Install the library directly from PyPI:
 
 ```bash
-pip install natural-query
+pip install natural_query_lib
 ```
 
 ---

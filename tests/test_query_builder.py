@@ -1,4 +1,4 @@
-from src.natural_query_lib_stescobedo import QueryBuilder, QueryType
+from src.natural_query_lib import QueryBuilder, QueryType
 
 
 def test_select_query():
