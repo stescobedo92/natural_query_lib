@@ -143,7 +143,7 @@ We welcome contributions to make **Natural Query** even better! Feel free to:
 
 ## 📜 License
 
-**Natural Query** is licensed under the GNU General Public License v3.0 License. See the [LICENSE](LICENSE) file for details.
+**Natural Query** is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
