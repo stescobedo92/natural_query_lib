@@ -25,6 +25,23 @@ pip install natural_query_lib
 
 ---
 
+## 🧪 Running Tests
+
+To run the test suite and verify all query builder features:
+
+```bash
+pytest tests/
+```
+
+The tests cover:
+- SELECT, INSERT, UPDATE, DELETE queries
+- Joins, ordering, limits, offsets
+- Grouping and having clauses
+- Parameter binding and JSON value handling
+- Error handling for missing table/columns
+
+---
+
 ## 🛠️ Usage Examples
 
 ### **1. Build a Simple SELECT Query**
@@ -36,12 +53,12 @@ query = (
     QueryBuilder(QueryType.SELECT)
     .from_table("users")
     .select_columns(["id", "name", "email"])
-    .where("age > %s", [18])
+    .where("age > 18")
     .set_limit(10)
     .build()
 )
 
-print(query)  # Output: SELECT id, name, email FROM users WHERE age > %s LIMIT 10
+print(query)  # Output: SELECT id, name, email FROM users WHERE age > 18 LIMIT 10
 ```
 
 ---
@@ -80,6 +97,7 @@ from natural_query_lib import QueryBuilder, QueryType
 query_builder = (
     QueryBuilder(QueryType.INSERT)
     .from_table("users")
+    .select_columns(["name", "email", "profile"])
     .values_json({
         "name": "John Doe",
         "email": "john@example.com",
@@ -96,7 +114,7 @@ print(params)  # Output: ["John Doe", "john@example.com", '{"age": 30, "location
 
 ---
 
-### **4. Complex Query with Joins**
+### **4. Complex Query with Joins, Group By, and Having**
 
 ```python
 from natural_query_lib import QueryBuilder, QueryType, JoinType
@@ -106,13 +124,30 @@ query = (
     .from_table("orders o")
     .select_columns(["o.id", "o.total", "u.name"])
     .join(JoinType.INNER, "users u", "o.user_id = u.id")
-    .where("o.total > %s", [100])
+    .where("o.total > 100")
+    .group_by_columns(["u.name"])
+    .having_condition("SUM(o.total) > 1000")
     .order_by_columns(["o.total DESC"])
+    .set_limit(5)
+    .set_offset(10)
     .build()
 )
 
-print(
-    query)  # Output: SELECT o.id, o.total, u.name FROM orders o INNER JOIN users u ON o.user_id = u.id WHERE o.total > %s ORDER BY o.total DESC
+print(query)
+# Output: SELECT o.id, o.total, u.name FROM orders o INNER JOIN users u ON o.user_id = u.id WHERE o.total > 100 GROUP BY u.name HAVING SUM(o.total) > 1000 ORDER BY o.total DESC LIMIT 5 OFFSET 10
+```
+
+---
+
+### **5. Error Handling Example**
+
+```python
+from natural_query_lib import QueryBuilder, QueryType, QueryBuilderError
+
+try:
+    query = QueryBuilder(QueryType.SELECT).select_columns(["id"]).build()
+except QueryBuilderError as e:
+    print("Error:", e)  # Output: Error: Table name is required to build the query.
 ```
 
 ---
@@ -151,4 +186,3 @@ We welcome contributions to make **Natural Query** even better! Feel free to:
 ---
 
 Happy coding! 🎉
-
